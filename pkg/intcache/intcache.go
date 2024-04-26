@@ -50,6 +50,10 @@ func (c *Cache) Incr(key string, dur time.Duration) int {
 	return 1
 }
 
+func (c *Cache) Delete(key string) {
+	c.items.Delete(key)
+}
+
 func (c *Cache) loopClean() {
 	ticker := time.NewTicker(c.cleanupInterval)
 	for {
