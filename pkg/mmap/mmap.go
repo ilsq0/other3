@@ -2,6 +2,10 @@ package mmap
 
 import "sync"
 
+func NewMap[K comparable, V any]() *Map[K, V] {
+	return &Map[K, V]{mp: make(map[K]V)}
+}
+
 type Map[K comparable, V any] struct {
 	mp map[K]V
 	mu sync.RWMutex
@@ -44,6 +48,12 @@ func (m *Map[K, V]) Count() int {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	return len(m.mp)
+}
+
+func (m *Map[K, V]) Inner() map[K]V {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	return m.mp
 }
 
 func (m *Map[K, V]) Loop(f func(K, V)) {
