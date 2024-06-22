@@ -11,10 +11,11 @@ type Map[K comparable, V any] struct {
 	mu sync.RWMutex
 }
 
-func (m *Map[K, V]) Get(k K) V {
+func (m *Map[K, V]) Get(k K) (V, bool) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	return m.mp[k]
+	v, b := m.mp[k]
+	return v, b
 }
 
 func (m *Map[K, V]) Load(k K, v V) (V, bool) {
