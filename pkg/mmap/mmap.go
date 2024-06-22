@@ -18,7 +18,7 @@ func (m *Map[K, V]) Get(k K) (V, bool) {
 	return v, b
 }
 
-func (m *Map[K, V]) Load(k K, f func() V) (V, bool) {
+func (m *Map[K, V]) Load(k K, f func() V) V {
 	m.mu.RLock()
 	v0, ok := m.mp[k]
 	m.mu.RUnlock()
@@ -30,7 +30,7 @@ func (m *Map[K, V]) Load(k K, f func() V) (V, bool) {
 			m.mp[k] = v0
 		}
 	}
-	return v0, ok
+	return v0
 }
 
 func (m *Map[K, V]) Put(k K, v V) {
