@@ -35,6 +35,13 @@ func (m *Map[K, V]) Get0(k K) (V, bool) {
 	return v, b
 }
 
+func (m *Map[K, V]) Contain(k K) bool {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	_, b := m.mp[k]
+	return b
+}
+
 func (m *Map[K, V]) Load(k K, f func() V) V {
 	m.mu.RLock()
 	v0, ok := m.mp[k]
@@ -97,4 +104,10 @@ func (m *Map[K, V]) Loop0(f func(K, V)) {
 	for k, v := range m.mp {
 		f(k, v)
 	}
+}
+
+func (m *Map[K, V]) SetMp(mp map[K]V) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.mp = mp
 }
