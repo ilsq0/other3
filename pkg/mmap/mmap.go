@@ -57,6 +57,15 @@ func (m *Map[K, V]) Load(k K, f func() V) V {
 	return v0
 }
 
+func (m *Map[K, V]) Load0(k K, f func() V) V {
+	v0, ok := m.mp[k]
+	if !ok {
+		v0 = f()
+		m.mp[k] = v0
+	}
+	return v0
+}
+
 func (m *Map[K, V]) Put(k K, v V) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
